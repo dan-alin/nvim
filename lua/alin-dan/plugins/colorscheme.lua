@@ -1,14 +1,22 @@
 return {
   "folke/tokyonight.nvim",
   priority = 1000,
-  transparent = true, -- Set to true if you want the terminal's background to be transparent
-  sidebars = { "nvim-tree" },
-  styles = {
-    -- Background styles. Can be "dark", "transparent" or "normal"
-    sidebars = "transparent", -- style for sidebars, see below
-    floats = "dark",          -- style for floating windows
-  },
   config = function()
-    vim.cmd([[colorscheme tokyonight-night]])
+    local transparent = true -- set to true if you would like to enable transparency
+
+    require("tokyonight").setup({
+      style = "night",
+      transparent = transparent,
+      styles = {
+        sidebars = transparent and "transparent" or "dark",
+        floats = transparent and "transparent" or "dark",
+      },
+      on_colors = function()
+      end,
+      on_highlights = function()
+      end
+    })
+
+    vim.cmd("colorscheme tokyonight-night")
   end,
 }
