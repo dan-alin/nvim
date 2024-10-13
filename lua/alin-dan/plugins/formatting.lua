@@ -20,6 +20,7 @@ return {
         graphql = { "biome" },
         liquid = { "biome" },
         lua = { "stylua" },
+        rust = { "rustfmt" }
       },
       format_on_save = {
         lsp_fallback = true,

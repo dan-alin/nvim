@@ -1,11 +1,10 @@
-
 return {
   "neovim/nvim-lspconfig",
   event = { "BufReadPre", "BufNewFile" },
   dependencies = {
     "hrsh7th/cmp-nvim-lsp",
     { "antosha417/nvim-lsp-file-operations", config = true },
-    { "folke/neodev.nvim", opts = {} },
+    { "folke/neodev.nvim",                   opts = {} },
   },
   config = function()
     -- import lspconfig plugin
@@ -49,10 +48,10 @@ return {
         keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts) -- smart rename
 
         opts.desc = "Show buffer diagnostics"
-        keymap.set("n", "<leader>D", "<cmd>Telescope diagnostics bufnr=0<CR>", opts) -- show  diagnostics for file
+        keymap.set("n", "<leader>d", "<cmd>Telescope diagnostics bufnr=0<CR>", opts) -- show  diagnostics for file
 
         opts.desc = "Show line diagnostics"
-        keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts) -- show diagnostics for line
+        keymap.set("n", "<leader>D", vim.diagnostic.open_float, opts) -- show diagnostics for line
 
         opts.desc = "Go to previous diagnostic"
         keymap.set("n", "[d", vim.diagnostic.goto_prev, opts) -- jump to previous diagnostic in buffer
@@ -86,11 +85,11 @@ return {
           capabilities = capabilities,
         })
       end,
-      ["tsserver"] = function()
+      ["ts_ls"] = function()
         -- configure typescript language server
-        lspconfig["tsserver"].setup({
+        lspconfig["ts_ls"].setup({
           capabilities = capabilities,
-          on_attach = function(client, bufnr)
+          on_attach = function(_, bufnr)
             -- enable formatting on save
             vim.api.nvim_buf_set_option(bufnr, "formatexpr", "vim.lsp.buf.formatting_sync()")
             vim.api.nvim_buf_set_option(bufnr, "formatprg", "vim.lsp.buf.formatting_sync()")
@@ -107,9 +106,9 @@ return {
         -- configure svelte server
         lspconfig["svelte"].setup({
           capabilities = capabilities,
-          on_attach = function(client, bufnr)
+          on_attach = function(client, _)
             vim.api.nvim_create_autocmd("BufWritePost", {
-              pattern = { "*.js", "*.ts" },
+              pattern = { "*.js", "*.ts", "*.svelte" },
               callback = function(ctx)
                 -- Here use ctx.match instead of ctx.file
                 client.notify("$/onDidChangeTsOrJsFile", { uri = ctx.match })
@@ -129,7 +128,7 @@ return {
         -- configure emmet language server
         lspconfig["emmet_ls"].setup({
           capabilities = capabilities,
-          filetypes = { "html", "typescriptreact", "javascriptreact", "css", "sass", "scss", "less", "svelte" },
+          filetypes = { "html", "typescriptreact", "javascriptreact", "svelte", "css", "sass", "scss", "less" },
         })
       end,
       ["lua_ls"] = function()
