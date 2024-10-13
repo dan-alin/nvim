@@ -41,5 +41,5 @@ keymap.set("n", "-", "<C-x>", { desc = "Decrement number" }) -- decrement
 keymap.set("n", "<C-a>", "gg<S-v>G")
 
 -- move lines
-keymap.set("n", "<J>", ":m .+1<CR>==", { desc = "Move line down" })
-keymap.set("n", "<K>", ":m .-2<CR>==", { desc = "Move line up" })
+keymap.set("n", "<C-j>", ":m .+1<CR>==", { desc = "Move line down" })
+keymap.set("n", "<C-k>", ":m .-2<CR>==", { desc = "Move line up" })
