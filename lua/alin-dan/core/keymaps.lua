@@ -15,9 +15,6 @@ keymap.set("i", "jk", "<ESC>", opts)
 -- delete buffer
 keymap.set("n", "<leader>bd", "<cmd>bd<CR>", opts)
 
--- delete other buffers
-keymap.set("n", "<leader>bo", "<cmd>BufOnly<CR>", opts)
-
 -- goto end of line
 keymap.set("n", "ge", "$", opts)
 
