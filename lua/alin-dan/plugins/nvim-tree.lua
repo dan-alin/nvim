@@ -82,7 +82,7 @@ return {
       "<leader>e",
       "<cmd>NvimTreeFindFileToggle<CR>",
       { desc = "Toggle file explorer on current file" }
-    )                                                                                              -- toggle file explorer on current file
-    keymap.set("n", "<leader>C", "<cmd>NvimTreeCollapse<CR>", { desc = "Collapse file explorer" }) -- collapse file explorer
+    )                                                                                    -- toggle file explorer on current file
+    keymap.set("n", "<esc>", "<cmd>NvimTreeClose<CR>", { desc = "Close file explorer" }) -- close file explorer
   end,
 }

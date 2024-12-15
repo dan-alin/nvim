@@ -12,9 +12,6 @@ keymap.set("n", "<leader>q", "<cmd>q<CR>", opts)
 -- esc insert mode
 keymap.set("i", "jk", "<ESC>", opts)
 
--- delete buffer
-keymap.set("n", "<leader>bd", "<cmd>bd<CR>", opts)
-
 -- goto end of line
 keymap.set("n", "ge", "$", opts)
 
@@ -26,7 +23,7 @@ keymap.set("n", "gs", "^", opts)
 -- move between buffers
 keymap.set("n", "<TAB>", "<cmd>bn<CR>", opts)
 keymap.set("n", "<S-TAB>", "<cmd>bp<CR>", opts)
-
+keymap.set("n", "<leader>x", "<cmd> bp|sp|bn|bd! <CR>", opts)
 
 keymap.set("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highlights" })
 
