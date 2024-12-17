@@ -6,3 +6,6 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
     vim.cmd("TSEnable highlight")
   end
 })
+
+-- set the cursoline to be transparent
+vim.cmd("highlight CursorLine guibg=NONE ctermbg=NONE")
