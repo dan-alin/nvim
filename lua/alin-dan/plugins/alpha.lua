@@ -18,10 +18,10 @@ return {
     }
     -- Set menu
     dashboard.section.buttons.val = {
-      dashboard.button("f", "󰱼   Find File", builtin.find_files),
+      dashboard.button("f", "󰱼   Find File", "<cmd>lua require('telescope.builtin').find_files()<CR>"),
       dashboard.button("e", "   File Explorer", "<cmd>NvimTreeToggle<CR>"),
-      dashboard.button("/", "   Live Grep ", builtin.live_grep),
-      dashboard.button("g", "󰱼   Find Git Files", builtin.git_files),
+      dashboard.button("/", "   Live Grep ", "<cmd>lua require('telescope.builtin').live_grep()<CR>"),
+      dashboard.button("g", "󰱼   Find Git Files", "<cmd>lua require('telescope.builtin').git_files()<CR>"),
       dashboard.button("l", "   Lazy", "<cmd>Lazy<CR>"),
       dashboard.button("m", "   Mason", "<cmd>Mason<CR>"),
       dashboard.button("q", "   Quit NVIM", "<cmd>qa<CR>"),
