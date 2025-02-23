@@ -18,5 +18,6 @@ require("lazy").setup({ { import = "alin-dan.plugins" }, { import = 'alin-dan.pl
   },
   change_detection = {
     notify = false,
-  }
+  },
+  ui = { border = "rounded" }
 })

@@ -22,10 +22,4 @@ return {
       "MunifTanjim/nui.nvim",
     },
   },
-  {
-    "rcarriga/nvim-notify",
-    opts = {
-      timeout = 5000,
-    }
-  }
 }

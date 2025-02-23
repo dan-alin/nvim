@@ -12,12 +12,20 @@ return {
     ayu.replace.a.bg = "#9d7cd8"
 
     require("lualine").setup({
+      sections = {
+        lualine_c = {
+          {
+            "filename",
+            path = 4
+          }
+        }
+      },
       options = {
         section_separators = { "", "" },
         component_separators = { "", "" },
         globalstatus = true,
         theme = ayu,
-        disabled_filetypes = { "alpha", "lazy" },
+        disabled_filetypes = { "alpha", "lazy", "mason", "TelescopePrompt", "TelescopeResults", "NvimTree" },
       },
     })
   end,
