@@ -5,13 +5,18 @@ return {
     "hrsh7th/cmp-nvim-lsp",
     { "antosha417/nvim-lsp-file-operations", config = true },
     { "folke/neodev.nvim",                   opts = {} },
+    "williamboman/mason-lspconfig.nvim",
   },
   config = function()
     -- import lspconfig plugin
     local lspconfig = require("lspconfig")
 
-    -- import mason_lspconfig plugin
-    local mason_lspconfig = require("mason-lspconfig")
+    -- import mason_lspconfig plugin safely
+    local mason_lspconfig_ok, mason_lspconfig = pcall(require, "mason-lspconfig")
+    if not mason_lspconfig_ok then
+      vim.notify("mason-lspconfig not found", vim.log.levels.ERROR)
+      return
+    end
 
     -- import cmp-nvim-lsp plugin
     local cmp_nvim_lsp = require("cmp_nvim_lsp")
@@ -71,95 +76,106 @@ return {
     local capabilities = cmp_nvim_lsp.default_capabilities()
 
     -- Change the Diagnostic symbols in the sign column (gutter)
-    -- (not in youtube nvim video)
-    local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
-    for type, icon in pairs(signs) do
-      local hl = "DiagnosticSign" .. type
-      vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-    end
+    local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
+    vim.diagnostic.config({
+      signs = {
+        text = {
+          [vim.diagnostic.severity.ERROR] = signs.Error,
+          [vim.diagnostic.severity.WARN] = signs.Warn,
+          [vim.diagnostic.severity.HINT] = signs.Hint,
+          [vim.diagnostic.severity.INFO] = signs.Info,
+        }
+      }
+    })
 
-    mason_lspconfig.setup_handlers({
-      -- default handler for installed servers
-      function(server_name)
-        lspconfig[server_name].setup({
-          capabilities = capabilities,
-        })
+    -- Setup individual LSP servers directly
+    
+    -- Configure TypeScript language server
+    lspconfig["ts_ls"].setup({
+      capabilities = capabilities,
+      on_attach = function(client, bufnr)
+        -- enable completion triggered by <c-x><c-o>
+        vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
+        
+        -- Enable formatting if the client supports it
+        if client.server_capabilities.documentFormattingProvider then
+          vim.bo[bufnr].formatexpr = "v:lua.vim.lsp.formatexpr()"
+        end
       end,
-      ["ts_ls"] = function()
-        -- configure typescript language server
-        lspconfig["ts_ls"].setup({
-          capabilities = capabilities,
-          on_attach = function(_, bufnr)
-            -- enable formatting on save
-            vim.api.nvim_buf_set_option(bufnr, "formatexpr", "vim.lsp.buf.formatting_sync()")
-            vim.api.nvim_buf_set_option(bufnr, "formatprg", "vim.lsp.buf.formatting_sync()")
+    })
+    
+    -- Configure Tailwind CSS language server
+    lspconfig["tailwindcss"].setup({
+      capabilities = capabilities,
+    })
+    
+    -- Configure Rust analyzer
+    lspconfig["rust_analyzer"].setup({
+      capabilities = capabilities,
+      settings = {
+        ["rust-analyzer"] = {
+          check = {
+            command = "clippy",
+          },
+        },
+      },
+    })
+    
+    -- Configure Svelte language server
+    lspconfig["svelte"].setup({
+      capabilities = capabilities,
+      on_attach = function(client, _)
+        vim.api.nvim_create_autocmd("BufWritePost", {
+          pattern = { "*.js", "*.ts", "*.svelte" },
+          callback = function(ctx)
+            -- Use ctx.file to get the file path
+            client.notify("$/onDidChangeTsOrJsFile", { uri = vim.uri_from_fname(ctx.file) })
           end,
         })
       end,
-      ["tailwindcss"] = function()
-        -- configure tailwindcss language server
-        lspconfig["tailwindcss"].setup({
-          capabilities = capabilities,
-        })
-      end,
-      ["rust_analyzer"] = function()
-        lspconfig["rust_analyzer"].setup({
-          capabilities = capabilities,
-          settings = {
-            ["rust-analyzer"] = {
-              check = {
-                command = "clippy",
-              },
-            },
+    })
+    
+    -- Configure GraphQL language server
+    lspconfig["graphql"].setup({
+      capabilities = capabilities,
+      filetypes = { "graphql", "gql", "svelte", "typescriptreact", "javascriptreact" },
+    })
+    
+    -- Configure Emmet language server
+    lspconfig["emmet_ls"].setup({
+      capabilities = capabilities,
+      filetypes = { "html", "typescriptreact", "javascriptreact", "svelte", "css", "sass", "scss", "less" },
+    })
+    
+    -- Configure HTML language server
+    lspconfig["html"].setup({
+      capabilities = capabilities,
+    })
+    
+    -- Configure CSS language server
+    lspconfig["cssls"].setup({
+      capabilities = capabilities,
+    })
+    
+    -- Configure Prisma language server
+    lspconfig["prismals"].setup({
+      capabilities = capabilities,
+    })
+    
+    -- Configure Lua language server (with special settings)
+    lspconfig["lua_ls"].setup({
+      capabilities = capabilities,
+      settings = {
+        Lua = {
+          -- make the language server recognize "vim" global
+          diagnostics = {
+            globals = { "vim" },
           },
-        });
-      end,
-      ["svelte"] = function()
-        -- configure svelte server
-        lspconfig["svelte"].setup({
-          capabilities = capabilities,
-          on_attach = function(client, _)
-            vim.api.nvim_create_autocmd("BufWritePost", {
-              pattern = { "*.js", "*.ts", "*.svelte" },
-              callback = function(ctx)
-                -- Here use ctx.match instead of ctx.file
-                client.notify("$/onDidChangeTsOrJsFile", { uri = ctx.match })
-              end,
-            })
-          end,
-        })
-      end,
-      ["graphql"] = function()
-        -- configure graphql language server
-        lspconfig["graphql"].setup({
-          capabilities = capabilities,
-          filetypes = { "graphql", "gql", "svelte", "typescriptreact", "javascriptreact" },
-        })
-      end,
-      ["emmet_ls"] = function()
-        -- configure emmet language server
-        lspconfig["emmet_ls"].setup({
-          capabilities = capabilities,
-          filetypes = { "html", "typescriptreact", "javascriptreact", "svelte", "css", "sass", "scss", "less" },
-        })
-      end,
-      ["lua_ls"] = function()
-        -- configure lua server (with special settings)
-        lspconfig["lua_ls"].setup({
-          capabilities = capabilities,
-          settings = {
-            Lua = {
-              -- make the language server recognize "vim" global
-              diagnostics = {
-                globals = { "vim" },
-              },
-              completion = {
-                callSnippet = "Replace",
-              },
-            },
+          completion = {
+            callSnippet = "Replace",
           },
-        })
-      end,
+        },
+      },
     })
   end,
 }
