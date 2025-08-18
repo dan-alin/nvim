@@ -3,7 +3,7 @@ return {
   dependencies = "nvim-treesitter/playground",
   run = ":TSUpdate",
   opts = {
-    highlight = { enable = true, additional_vim_regex_highlighting = { 'svelte' } },
+    highlight = { enable = true },
     indent = { enable = true },
     playground = { enable = true },
     ensure_installed = {
@@ -33,6 +33,7 @@ return {
       "svelte",
       "css",
       "scss",
+      "vue",
     },
     incremental_selection = {
       enable = true,

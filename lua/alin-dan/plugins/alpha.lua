@@ -23,7 +23,6 @@ return {
 			dashboard.button("/", "   Live Grep ", "<cmd>lua require('telescope.builtin').live_grep()<CR>"),
 			dashboard.button("g", "󰱼   Find Git Files", "<cmd>lua require('telescope.builtin').git_files()<CR>"),
 			dashboard.button("l", "   Lazy", "<cmd>Lazy<CR>"),
-			dashboard.button("m", "   Mason", "<cmd>Mason<CR>"),
 			dashboard.button("q", "   Quit NVIM", "<cmd>qa<CR>"),
 		}
 

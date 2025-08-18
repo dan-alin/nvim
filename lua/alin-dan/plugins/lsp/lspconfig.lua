@@ -5,18 +5,19 @@ return {
     "hrsh7th/cmp-nvim-lsp",
     { "antosha417/nvim-lsp-file-operations", config = true },
     { "folke/neodev.nvim",                   opts = {} },
-    "williamboman/mason-lspconfig.nvim",
   },
   config = function()
+    -- Suppress deprecation warnings temporarily while plugins update
+    local notify_once = vim.notify_once
+    vim.notify_once = function(msg, level, opts)
+      if type(msg) == "string" and msg:match("jump_to_location.*deprecated") then
+        return -- Suppress jump_to_location deprecation warnings
+      end
+      return notify_once(msg, level, opts)
+    end
+    
     -- import lspconfig plugin
     local lspconfig = require("lspconfig")
-
-    -- import mason_lspconfig plugin safely
-    local mason_lspconfig_ok, mason_lspconfig = pcall(require, "mason-lspconfig")
-    if not mason_lspconfig_ok then
-      vim.notify("mason-lspconfig not found", vim.log.levels.ERROR)
-      return
-    end
 
     -- import cmp-nvim-lsp plugin
     local cmp_nvim_lsp = require("cmp_nvim_lsp")
@@ -38,7 +39,11 @@ return {
         keymap.set("n", "gD", vim.lsp.buf.declaration, opts) -- go to declaration
 
         opts.desc = "Show LSP definitions"
-        keymap.set("n", "gd", "<cmd>Telescope lsp_definitions<CR>", opts) -- show lsp definitions
+        keymap.set("n", "gd", vim.lsp.buf.definition, opts) -- show lsp definitions
+        
+        -- Alternative Telescope mapping
+        opts.desc = "Show LSP definitions (Telescope)"
+        keymap.set("n", "<leader>gd", "<cmd>Telescope lsp_definitions<CR>", opts) -- show lsp definitions via telescope
 
         opts.desc = "Show LSP implementations"
         keymap.set("n", "gi", "<cmd>Telescope lsp_implementations<CR>", opts) -- show lsp implementations
@@ -74,6 +79,9 @@ return {
 
     -- used to enable autocompletion (assign to every lsp server config)
     local capabilities = cmp_nvim_lsp.default_capabilities()
+    
+    -- Set default position encoding to help with warnings
+    capabilities.offsetEncoding = { "utf-16" }
 
     -- Change the Diagnostic symbols in the sign column (gutter)
     local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
@@ -90,9 +98,19 @@ return {
 
     -- Setup individual LSP servers directly
     
-    -- Configure TypeScript language server
+    -- IMPORTANT: Configure TypeScript FIRST - required by vue_ls
     lspconfig["ts_ls"].setup({
       capabilities = capabilities,
+      filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
+      init_options = {
+        plugins = {
+          {
+            name = "@vue/typescript-plugin",
+            location = vim.fn.expand("~/.volta/tools/image/packages/@vue/language-server/lib/node_modules/@vue/language-server"),
+            languages = { "vue" },
+          },
+        },
+      },
       on_attach = function(client, bufnr)
         -- enable completion triggered by <c-x><c-o>
         vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
@@ -144,7 +162,7 @@ return {
     -- Configure Emmet language server
     lspconfig["emmet_ls"].setup({
       capabilities = capabilities,
-      filetypes = { "html", "typescriptreact", "javascriptreact", "svelte", "css", "sass", "scss", "less" },
+      filetypes = { "html", "typescriptreact", "javascriptreact", "svelte", "vue", "css", "sass", "scss", "less" },
     })
     
     -- Configure HTML language server
@@ -177,5 +195,8 @@ return {
         },
       },
     })
+    
+    -- Vue support is handled by ts_ls with @vue/typescript-plugin
+    -- No separate Vue LSP server needed in modern setup
   end,
 }
