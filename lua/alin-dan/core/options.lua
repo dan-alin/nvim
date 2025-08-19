@@ -34,3 +34,12 @@ opt.clipboard:append("unnamedplus") -- use system clipboard as default register
 
 -- turn off swapfile
 opt.swapfile = false
+
+-- folding configuration with TreeSitter and nvim-ufo
+opt.foldmethod = "expr"
+opt.foldexpr = "nvim_treesitter#foldexpr()"
+opt.foldenable = true
+opt.foldlevel = 99 -- start with all folds open
+opt.foldcolumn = "1" -- show fold column
+opt.foldlevelstart = 99 -- start with all folds open
+opt.fillchars = { fold = " ", foldopen = "▾", foldsep = " ", foldclose = "▸" }

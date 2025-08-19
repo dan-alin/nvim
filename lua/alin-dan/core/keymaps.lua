@@ -48,3 +48,13 @@ keymap.set("n", "<leader>qt", function()
 		vim.cmd("copen")
 	end
 end, { desc = "Toggle quickfix" })
+
+-- folding keymaps
+keymap.set("n", "za", "za", { desc = "Toggle fold" })
+keymap.set("n", "zc", "zc", { desc = "Close fold" })
+keymap.set("n", "zo", "zo", { desc = "Open fold" })
+keymap.set("n", "zR", "zR", { desc = "Open all folds" })
+keymap.set("n", "zM", "zM", { desc = "Close all folds" })
+keymap.set("n", "zj", "zj", { desc = "Next fold" })
+keymap.set("n", "zk", "zk", { desc = "Previous fold" })
+keymap.set("n", "<leader>za", "za", { desc = "Toggle fold at cursor" })

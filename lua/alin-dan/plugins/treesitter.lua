@@ -5,6 +5,7 @@ return {
   opts = {
     highlight = { enable = true },
     indent = { enable = true },
+    fold = { enable = true },
     playground = { enable = true },
     ensure_installed = {
       "bash",
