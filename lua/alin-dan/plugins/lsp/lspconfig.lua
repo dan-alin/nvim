@@ -82,20 +82,36 @@ return {
     
     -- Set default position encoding to help with warnings
     capabilities.offsetEncoding = { "utf-16" }
+    
+    -- Increase LSP timeout for better reliability
+    vim.lsp.set_log_level("WARN") -- Reduce log verbosity
 
     -- Change the Diagnostic symbols in the sign column (gutter)
     local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
-    vim.diagnostic.config({
-      signs = {
-        text = {
-          [vim.diagnostic.severity.ERROR] = signs.Error,
-          [vim.diagnostic.severity.WARN] = signs.Warn,
-          [vim.diagnostic.severity.HINT] = signs.Hint,
-          [vim.diagnostic.severity.INFO] = signs.Info,
-        }
-      }
-    })
+    -- Configure diagnostic signs (this extends the global config from init.lua)
+    for type, icon in pairs(signs) do
+      local hl = "DiagnosticSign" .. type
+      vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
+    end
 
+    -- Add custom vue_ls configuration
+    local configs = require('lspconfig.configs')
+    if not configs.vue_ls then
+      configs.vue_ls = {
+        default_config = {
+          cmd = { 'vue-language-server', '--stdio' },
+          filetypes = { 'vue' },
+          root_dir = lspconfig.util.root_pattern('package.json', 'vue.config.js', 'vite.config.js', 'nuxt.config.js', '.git'),
+          settings = {},
+          init_options = {
+            typescript = {
+              tsdk = vim.fn.expand("~/.volta/tools/image/packages/typescript/lib/node_modules/typescript/lib"),
+            },
+          },
+        },
+      }
+    end
+    
     -- Setup individual LSP servers directly
     
     -- IMPORTANT: Configure TypeScript FIRST - required by vue_ls
@@ -119,6 +135,9 @@ return {
         if client.server_capabilities.documentFormattingProvider then
           vim.bo[bufnr].formatexpr = "v:lua.vim.lsp.formatexpr()"
         end
+        
+        -- Force diagnostics to show for this buffer
+        vim.diagnostic.show(nil, bufnr)
       end,
     })
     

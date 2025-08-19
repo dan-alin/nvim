@@ -5,20 +5,20 @@ return {
     local conform = require("conform")
 
     conform.setup({
-      cmd = { 'biome', 'lsp-proxy' },
       formatters_by_ft = {
-        javascript = { "biome" },
-        typescript = { "biome" },
-        javascriptreact = { "biome" },
-        typescriptreact = { "biome" },
-        svelte = { "biome" },
-        css = { "biome" },
-        html = { "biome" },
-        json = { "biome" },
-        yaml = { "biome" },
-        markdown = { "biome" },
-        graphql = { "biome" },
-        liquid = { "biome" },
+        javascript = { "prettier" },
+        typescript = { "prettier" },
+        javascriptreact = { "prettier" },
+        typescriptreact = { "prettier" },
+        vue = { "prettier" },
+        svelte = { "prettier" },
+        css = { "prettier" },
+        html = { "prettier" },
+        json = { "prettier" },
+        yaml = { "prettier" },
+        markdown = { "prettier" },
+        graphql = { "prettier" },
+        liquid = { "prettier" },
         lua = { "stylua" },
         rust = { "rustfmt" }
       },
