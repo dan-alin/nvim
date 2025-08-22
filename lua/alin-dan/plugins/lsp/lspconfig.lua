@@ -88,11 +88,17 @@ return {
 
     -- Change the Diagnostic symbols in the sign column (gutter)
     local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
-    -- Configure diagnostic signs (this extends the global config from init.lua)
-    for type, icon in pairs(signs) do
-      local hl = "DiagnosticSign" .. type
-      vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-    end
+    -- Configure diagnostic signs using the modern API
+    vim.diagnostic.config({
+      signs = {
+        text = {
+          [vim.diagnostic.severity.ERROR] = signs.Error,
+          [vim.diagnostic.severity.WARN] = signs.Warn,
+          [vim.diagnostic.severity.HINT] = signs.Hint,
+          [vim.diagnostic.severity.INFO] = signs.Info,
+        }
+      }
+    })
 
     -- Add custom vue_ls configuration
     local configs = require('lspconfig.configs')
@@ -144,6 +150,40 @@ return {
     -- Configure Tailwind CSS language server
     lspconfig["tailwindcss"].setup({
       capabilities = capabilities,
+      filetypes = { "html", "css", "scss", "javascript", "typescript", "vue", "svelte", "javascriptreact", "typescriptreact" },
+      settings = {
+        tailwindCSS = {
+          classAttributes = { "class", "className", "classList", "ngClass" },
+          lint = {
+            cssConflict = "warning",
+            invalidApply = "error",
+            invalidConfigPath = "error",
+            invalidScreen = "error",
+            invalidTailwindDirective = "error",
+            invalidVariant = "error",
+            recommendedVariantOrder = "warning"
+          },
+          validate = true,
+          experimental = {
+            classRegex = {
+              -- Vue computed properties and methods return statements
+              "return\\s+['\"]([^'\"]*)['\"]|return\\s*\\{[^}]*['\"]([^'\"]*)['\"]|return\\s*`([^`]*)`",
+              -- Vue class bindings in templates
+              ":class\\s*=\\s*['\"]([^'\"]*)['\"]|class\\s*=\\s*['\"]([^'\"]*)['\"]|\\[class\\]\\s*=\\s*['\"]([^'\"]*)['\"]|\\[class\\]\\s*=\\s*`([^`]*)`",
+              -- Dynamic class construction with clsx/classnames
+              "clsx\\(([^)]*)\\)|classnames\\(([^)]*)\\)|cn\\(([^)]*)\\)",
+              -- Template literals and string interpolation
+              "`([^`]*)`|\\$\\{[^}]*['\"]([^'\"]*)['\"]|['\"]([^'\"]*)['\"](?=\\s*(?:;|\\)|,|$))",
+              -- Object properties and array elements
+              "['\"]([^'\"]*)['\"]\\s*(?::|,)|\\{[^}]*['\"]([^'\"]*)['\"]|\\[[^\\]]*['\"]([^'\"]*)['\"]|([a-zA-Z0-9\\-_]+)(?=\\s*:)"
+            }
+          }
+        }
+      },
+      on_attach = function(client, bufnr)
+        -- Enable completion triggered by <c-x><c-o>
+        vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
+      end,
     })
     
     -- Configure Rust analyzer
