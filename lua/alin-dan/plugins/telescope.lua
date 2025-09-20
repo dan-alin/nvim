@@ -26,6 +26,15 @@ return {
       defaults = {
         path_display = { "smart" },
         file_ignore_patterns = { "node_modules", ".git" },
+        vimgrep_arguments = {
+          "rg",
+          "--color=never",
+          "--no-heading",
+          "--with-filename",
+          "--line-number",
+          "--column",
+          "--smart-case",
+        },
         mappings = {
           i = {
             ["<esc>"] = actions.close,                   -- close pressing esc
