@@ -5,7 +5,10 @@ return {
 		"hrsh7th/cmp-nvim-lsp",
 		{ "antosha417/nvim-lsp-file-operations", config = true },
 		{ "folke/neodev.nvim", opts = {} },
-		"williamboman/mason-lspconfig.nvim",
+		{
+			"williamboman/mason.nvim",
+			"williamboman/mason-lspconfig.nvim",
+		},
 	},
 	config = function()
 		-- Suppress deprecation warnings temporarily while plugins update
@@ -19,10 +22,12 @@ return {
 
 		-- import lspconfig plugin
 		local lspconfig = require("lspconfig")
-		local mason_lspconfig = require("mason-lspconfig")
-
+		
 		-- import cmp-nvim-lsp plugin
 		local cmp_nvim_lsp = require("cmp_nvim_lsp")
+		
+		-- import mason-lspconfig plugin
+		local mason_lspconfig = require("mason-lspconfig")
 
 		local keymap = vim.keymap -- for conciseness
 
@@ -102,127 +107,144 @@ return {
 			},
 		})
 
-		-- Mason LSP server handlers
-		mason_lspconfig.setup_handlers({
-			-- default handler for installed servers
-			function(server_name)
-				lspconfig[server_name].setup({
-					capabilities = capabilities,
-				})
-			end,
+		-- Setup mason-lspconfig with handlers
+		mason_lspconfig.setup({
+			-- list of servers for mason to install
+			ensure_installed = {
+				"ts_ls",
+				"html",
+				"cssls",
+				"tailwindcss",
+				"svelte",
+				"lua_ls",
+				"graphql",
+				"prismals",
+				"rust_analyzer",
+				"angularls",
+				"vue_ls",
+			},
+			automatic_installation = true,
+			handlers = {
+				-- default handler for installed servers
+				function(server_name)
+					lspconfig[server_name].setup({
+						capabilities = capabilities,
+					})
+				end,
 
-			-- Tailwind CSS with custom settings
-			["tailwindcss"] = function()
-				lspconfig["tailwindcss"].setup({
-					capabilities = capabilities,
-					filetypes = {
-						"html",
-						"css",
-						"scss",
-						"javascript",
-						"typescript",
-						"vue",
-						"svelte",
-						"javascriptreact",
-						"typescriptreact",
-					},
-					settings = {
-						tailwindCSS = {
-							classAttributes = { "class", "className", "classList", "ngClass" },
-							lint = {
-								cssConflict = "warning",
-								invalidApply = "error",
-								invalidConfigPath = "error",
-								invalidScreen = "error",
-								invalidTailwindDirective = "error",
-								invalidVariant = "error",
-								recommendedVariantOrder = "warning",
-							},
-							validate = true,
-							experimental = {
-								classRegex = {
-									"return\\s+['\"]([^'\"]*)['\"]|return\\s*\\{[^}]*['\"]([^'\"]*)['\"]|return\\s*`([^`]*)`",
-									":class\\s*=\\s*['\"]([^'\"]*)['\"]|class\\s*=\\s*['\"]([^'\"]*)['\"]|\\[class\\]\\s*=\\s*['\"]([^'\"]*)['\"]|\\[class\\]\\s*=\\s*`([^`]*)`",
-									"clsx\\(([^)]*)\\)|classnames\\(([^)]*)\\)|cn\\(([^)]*)\\)",
-									"`([^`]*)`|\\$\\{[^}]*['\"]([^'\"]*)['\"]|['\"]([^'\"]*)['\"](?=\\s*(?:;|\\)|,|$))",
-									"['\"]([^'\"]*)['\"]\\s*(?::|,)|\\{[^}]*['\"]([^'\"]*)['\"]|\\[[^\\]]*['\"]([^'\"]*)['\"]|([a-zA-Z0-9\\-_]+)(?=\\s*:)",
+				-- Tailwind CSS with custom settings
+				["tailwindcss"] = function()
+					lspconfig["tailwindcss"].setup({
+						capabilities = capabilities,
+						filetypes = {
+							"html",
+							"css",
+							"scss",
+							"javascript",
+							"typescript",
+							"vue",
+							"svelte",
+							"javascriptreact",
+							"typescriptreact",
+						},
+						settings = {
+							tailwindCSS = {
+								classAttributes = { "class", "className", "classList", "ngClass" },
+								lint = {
+									cssConflict = "warning",
+									invalidApply = "error",
+									invalidConfigPath = "error",
+									invalidScreen = "error",
+									invalidTailwindDirective = "error",
+									invalidVariant = "error",
+									recommendedVariantOrder = "warning",
+								},
+								validate = true,
+								experimental = {
+									classRegex = {
+										"return\\s+['\"]([^'\"]*)['\"]|return\\s*\\{[^}]*['\"]([^'\"]*)['\"]|return\\s*`([^`]*)`",
+										":class\\s*=\\s*['\"]([^'\"]*)['\"]|class\\s*=\\s*['\"]([^'\"]*)['\"]|\\[class\\]\\s*=\\s*['\"]([^'\"]*)['\"]|\\[class\\]\\s*=\\s*`([^`]*)`",
+										"clsx\\(([^)]*)\\)|classnames\\(([^)]*)\\)|cn\\(([^)]*)\\)",
+										"`([^`]*)`|\\$\\{[^}]*['\"]([^'\"]*)['\"]|['\"]([^'\"]*)['\"](?=\\s*(?:;|\\)|,|$))",
+										"['\"]([^'\"]*)['\"]\\s*(?::|,)|\\{[^}]*['\"]([^'\"]*)['\"]|\\[[^\\]]*['\"]([^'\"]*)['\"]|([a-zA-Z0-9\\-_]+)(?=\\s*:)",
+									},
 								},
 							},
 						},
-					},
-				})
-			end,
+					})
+				end,
 
-			-- Rust analyzer with clippy
-			["rust_analyzer"] = function()
-				lspconfig["rust_analyzer"].setup({
-					capabilities = capabilities,
-					settings = {
-						["rust-analyzer"] = {
-							check = {
-								command = "clippy",
+				-- Rust analyzer with clippy
+				["rust_analyzer"] = function()
+					lspconfig["rust_analyzer"].setup({
+						capabilities = capabilities,
+						settings = {
+							["rust-analyzer"] = {
+								check = {
+									command = "clippy",
+								},
 							},
 						},
-					},
-				})
-			end,
+					})
+				end,
 
-			["lua_ls"] = function()
-				lspconfig["lua_ls"].setup({
-					capabilities = capabilities,
-					settings = {
-						Lua = {
-							diagnostics = {
-								globals = { "vim" },
-							},
-							completion = {
-								callSnippet = "Replace",
+				["lua_ls"] = function()
+					lspconfig["lua_ls"].setup({
+						capabilities = capabilities,
+						settings = {
+							Lua = {
+								diagnostics = {
+									globals = { "vim" },
+								},
+								completion = {
+									callSnippet = "Replace",
+								},
 							},
 						},
-					},
-				})
-			end,
+					})
+				end,
 
-			["angularls"] = function()
-				lspconfig["angularls"].setup({
-					capabilities = capabilities,
-					-- Include htmlangular for Angular component templates
-					filetypes = { "typescript", "html", "htmlangular", "typescriptreact" },
-					root_dir = function(fname)
-						local root = lspconfig.util.root_pattern("angular.json", "project.json", "nx.json")(fname)
-						if not root then
-							return nil
-						end
+				["angularls"] = function()
+					lspconfig["angularls"].setup({
+						capabilities = capabilities,
+						-- Include htmlangular for Angular component templates
+						filetypes = { "typescript", "html", "htmlangular", "typescriptreact" },
+						root_dir = function(fname)
+							local root = lspconfig.util.root_pattern("angular.json", "project.json", "nx.json")(fname)
+							if not root then
+								return nil
+							end
 
-						local has_lang_service = vim.fn.filereadable(
-							root .. "/node_modules/@angular/language-service/package.json"
-						) == 1
-						if not has_lang_service then
-							vim.notify(
-								"Angular LSP: @angular/language-service not found in "
-									.. root
-									.. ". Install it with: npm install --save-dev @angular/language-service",
-								vim.log.levels.WARN
-							)
-							return nil
-						end
+							local has_lang_service = vim.fn.filereadable(
+								root .. "/node_modules/@angular/language-service/package.json"
+							) == 1
+							if not has_lang_service then
+								vim.notify(
+									"Angular LSP: @angular/language-service not found in "
+										.. root
+										.. ". Install it with: npm install --save-dev @angular/language-service",
+									vim.log.levels.WARN
+								)
+								return nil
+							end
 
-						return root
-					end,
-					settings = {
-						angular = {
-							enableTracing = false,
-							log = "off",
-							strictTemplates = true,
+							return root
+						end,
+						settings = {
+							angular = {
+								enableTracing = false,
+								log = "off",
+								strictTemplates = true,
+							},
 						},
-					},
-					on_attach = function(client, bufnr)
-						-- Angular 20 specific optimizations
-						client.server_capabilities.documentFormattingProvider = false
-						client.server_capabilities.documentRangeFormattingProvider = false
-					end,
-				})
-			end,
+						on_attach = function(client, bufnr)
+							-- Angular 20 specific optimizations
+							client.server_capabilities.documentFormattingProvider = false
+							client.server_capabilities.documentRangeFormattingProvider = false
+						end,
+					})
+				end,
+			},
 		})
 	end,
 }
