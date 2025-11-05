@@ -18,6 +18,19 @@ return {
           opts = { skip = true },
         },
       },
+      views = {
+        notify = {
+          position = {
+            row = "100%",
+            col = "100%",
+          },
+          size = {
+            width = "auto",
+            height = "auto",
+          },
+          anchor = "SE", -- Southeast (bottom right)
+        },
+      },
       presets = {
         lsp_doc_border = true,
       },
