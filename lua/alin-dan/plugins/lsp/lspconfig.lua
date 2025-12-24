@@ -107,6 +107,22 @@ return {
 			},
 		})
 
+		-- Function to find the Vue TypeScript plugin
+		local function get_vue_plugin_path()
+			-- Check project-local installation first (if exists)
+			local project_root = vim.fn.getcwd()
+			local plugin_path = project_root .. "/node_modules/@vue/typescript-plugin"
+			if vim.fn.isdirectory(plugin_path) == 1 then
+				return plugin_path
+			end
+			-- Use the globally bundled plugin from Mason's vue-language-server
+			local global_path = vim.fn.expand("~/.local/share/nvim/mason/packages/vue-language-server/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin")
+			if vim.fn.isdirectory(global_path) == 1 then
+				return global_path
+			end
+			return ""
+		end
+
 		-- Setup mason-lspconfig with handlers
 		mason_lspconfig.setup({
 			-- list of servers for mason to install
@@ -130,6 +146,23 @@ return {
 				function(server_name)
 					lspconfig[server_name].setup({
 						capabilities = capabilities,
+					})
+				end,
+
+				-- TypeScript server with Vue support
+				["ts_ls"] = function()
+					lspconfig["ts_ls"].setup({
+						capabilities = capabilities,
+						init_options = {
+							plugins = {
+								{
+									name = "@vue/typescript-plugin",
+									location = get_vue_plugin_path(),
+									languages = { "vue" },
+								},
+							},
+						},
+						filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
 					})
 				end,
 
@@ -227,6 +260,15 @@ return {
 								},
 							},
 						},
+					})
+				end,
+
+				["vue_ls"] = function()
+					-- Vue language server works with ts_ls in hybrid mode
+					-- No additional config needed - just ensure ts_ls is also running
+					lspconfig["vue_ls"].setup({
+						capabilities = capabilities,
+						filetypes = { "vue" },
 					})
 				end,
 
