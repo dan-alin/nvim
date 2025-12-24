@@ -37,15 +37,6 @@ keymap.set("n", "<C-a>", "gg<S-v>G")
 keymap.set("n", "<C-j>", ":m .+1<CR>==", { desc = "Move line down" })
 keymap.set("n", "<C-k>", ":m .-2<CR>==", { desc = "Move line up" })
 
+-- quickfix navigation
 keymap.set("n", "]q", ":cnext<CR>", { desc = "Next quickfix item" })
 keymap.set("n", "[q", ":cprev<CR>", { desc = "Previous quickfix item" })
-keymap.set("n", "<leader>qo", ":copen<CR>", { desc = "Open quickfix list" })
-keymap.set("n", "<leader>qc", ":cclose<CR>", { desc = "Close quickfix list" })
-
-keymap.set("n", "<leader>qt", function()
-	if vim.fn.getqflist({ winid = 0 }).winid > 0 then
-		vim.cmd("cclose")
-	else
-		vim.cmd("copen")
-	end
-end, { desc = "Toggle quickfix" })

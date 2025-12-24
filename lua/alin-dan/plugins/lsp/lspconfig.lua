@@ -22,10 +22,10 @@ return {
 
 		-- import lspconfig plugin
 		local lspconfig = require("lspconfig")
-		
+
 		-- import cmp-nvim-lsp plugin
 		local cmp_nvim_lsp = require("cmp_nvim_lsp")
-		
+
 		-- import mason-lspconfig plugin
 		local mason_lspconfig = require("mason-lspconfig")
 
@@ -118,6 +118,7 @@ return {
 				"svelte",
 				"lua_ls",
 				"graphql",
+				"emmet_ls",
 				"prismals",
 				"rust_analyzer",
 				"angularls",
@@ -198,6 +199,31 @@ return {
 								},
 								completion = {
 									callSnippet = "Replace",
+								},
+							},
+						},
+					})
+				end,
+
+				["emmet_ls"] = function()
+					lspconfig["emmet_ls"].setup({
+						capabilities = capabilities,
+						filetypes = {
+							"html",
+							"css",
+							"scss",
+							"javascript",
+							"javascriptreact",
+							"typescript",
+							"typescriptreact",
+							"vue",
+							"svelte",
+						},
+						init_options = {
+							html = {
+								options = {
+									-- For possible options, see: https://github.com/emmetio/emmet/blob/master/src/config.ts#L79-L267
+									["bem.enabled"] = true,
 								},
 							},
 						},
