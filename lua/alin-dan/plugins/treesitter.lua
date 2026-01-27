@@ -1,63 +1,80 @@
 return {
-	"nvim-treesitter/nvim-treesitter",
-	dependencies = "nvim-treesitter/playground",
-	build = ":TSUpdate",
-	config = function()
-		require("nvim-treesitter.configs").setup({
-		highlight = { enable = true },
-		indent = { enable = true },
-		fold = { enable = true },
-		playground = { enable = true },
-		ensure_installed = {
-			"bash",
-			"diff",
-			"html",
-			"javascript",
-			"jsdoc",
-			"json",
-			"jsonc",
-			"lua",
-			"luadoc",
-			"luap",
-			"markdown",
-			"markdown_inline",
-			"python",
-			"query",
-			"regex",
-			"toml",
-			"tsx",
-			"typescript",
-			"vim",
-			"vimdoc",
-			"xml",
-			"yaml",
-			"rust",
-			"svelte",
-			"css",
-			"scss",
-			"vue",
-			"angular",
-			-- Additional parsers for Angular development
-			"htmldjango", -- for Angular templates
-		},
-		incremental_selection = {
-			enable = true,
-			keymaps = {
-				init_selection = "<C-space>",
-				node_incremental = "<C-space>",
-				scope_incremental = false,
-				node_decremental = "<bs>",
-			},
-		},
-		textobjects = {
-			move = {
+	{ "nvim-treesitter/playground", cmd = "TSPlaygroundToggle" },
+
+	{
+		"nvim-treesitter/nvim-treesitter",
+		build = ":TSUpdate",
+		opts = {
+			ensure_installed = {
+				"bash",
+				"diff",
+				"html",
+				"javascript",
+				"jsdoc",
+				"json",
+				"jsonc",
+				"lua",
+				"luadoc",
+				"luap",
+				"markdown",
+				"markdown_inline",
+				"python",
+				"query",
+				"regex",
+				"toml",
+				"tsx",
+				"typescript",
+				"vim",
+				"vimdoc",
+				"xml",
+				"yaml",
+				"rust",
+				"svelte",
+				"css",
+				"scss",
+				"vue",
+				"angular",
+			}, -- matchup = {
+			-- 	enable = true,
+			-- },
+
+			-- https://github.com/nvim-treesitter/playground#query-linter
+			query_linter = {
 				enable = true,
-				goto_next_start = { ["]f"] = "@function.outer", ["]c"] = "@class.outer" },
-				goto_next_end = { ["]F"] = "@function.outer", ["]C"] = "@class.outer" },
-				goto_previous_start = { ["[f"] = "@function.outer", ["[c"] = "@class.outer" },
-				goto_previous_end = { ["[F"] = "@function.outer", ["[C"] = "@class.outer" },
+				use_virtual_text = true,
+				lint_events = { "BufWrite", "CursorHold" },
+			},
+
+			playground = {
+				enable = true,
+				disable = {},
+				updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
+				persist_queries = true, -- Whether the query persists across vim sessions
+				keybindings = {
+					toggle_query_editor = "o",
+					toggle_hl_groups = "i",
+					toggle_injected_languages = "t",
+					toggle_anonymous_nodes = "a",
+					toggle_language_display = "I",
+					focus_language = "f",
+					unfocus_language = "F",
+					update = "R",
+					goto_node = "<cr>",
+					show_help = "?",
+				},
 			},
 		},
-		})
-	end,
+		config = function(_, opts)
+			local TS = require("nvim-treesitter")
+			TS.setup(opts)
+
+			-- MDX
+			vim.filetype.add({
+				extension = {
+					mdx = "mdx",
+				},
+			})
+			vim.treesitter.language.register("markdown", "mdx")
+		end,
+	},
 }
