@@ -4,7 +4,7 @@ return {
 	config = function()
 		local alpha = require("alpha")
 		local dashboard = require("alpha.themes.dashboard")
-		local builtin = require("telescope.builtin")
+
 		-- Set header
 		dashboard.section.header.val = {
 			"                               ",

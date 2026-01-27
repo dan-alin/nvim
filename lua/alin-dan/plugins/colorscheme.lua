@@ -24,7 +24,7 @@ return {
 -- return {
 -- 	"rose-pine/neovim",
 -- 	name = "rose-pine",
--- 	priority = 1000,
+-- 	priority = 1001,
 -- 	config = function()
 -- 		require("rose-pine").setup({
 -- 			variant = "main",
@@ -32,7 +32,7 @@ return {
 -- 			palette = {
 -- 				-- Override the builtin palette per variant
 -- 				main = {
--- 					base = "#16161e",
+-- 					base = "#16162e",
 -- 				},
 -- 			},
 -- 			styles = {

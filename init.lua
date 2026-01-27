@@ -35,3 +35,6 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile", "InsertLeave", "TextChang
 })
 -- set the cursoline to be transparent
 vim.cmd("highlight CursorLine guibg=NONE ctermbg=NONE")
+
+-- Hide end-of-buffer tildes
+vim.opt.fillchars:append({ eob = " " })

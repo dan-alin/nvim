@@ -22,21 +22,25 @@ keymap.set("n", "gs", "^", opts)
 keymap.set("n", "<TAB>", "<cmd>bn<CR>", opts)
 keymap.set("n", "<S-TAB>", "<cmd>bp<CR>", opts)
 keymap.set("n", "<leader>x", "<cmd> bp|sp|bn|bd! <CR>", opts)
-keymap.set("n", "<leader>bo", "<cmd>%bd|e#|bd# <CR>", { desc = "Close all buffers except current" })
+keymap.set("n", "<leader>bo", "<cmd>%bd|e#|bd# <CR>", { desc = "Close all buffers except current" }, opts)
 
-keymap.set("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highlights" })
+-- clear search highlights
+keymap.set("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highlights" }, opts)
 
 -- increment/decrement numbers
-keymap.set("n", "+", "<C-a>", { desc = "Increment number" }) -- increment
-keymap.set("n", "-", "<C-x>", { desc = "Decrement number" }) -- decrement
+keymap.set("n", "+", "<C-a>", { desc = "Increment number" }, opts) -- increment
+keymap.set("n", "-", "<C-x>", { desc = "Decrement number" }, opts) -- decrement
 
 -- select all
-keymap.set("n", "<C-a>", "gg<S-v>G")
+keymap.set("n", "<C-a>", "gg<S-v>G, opts")
+
+-- paste without overwriting register
+keymap.set("x", "<leader>p", '"_dP', { desc = "Paste without overwriting register" }, opts)
 
 -- move lines
-keymap.set("n", "<C-j>", ":m .+1<CR>==", { desc = "Move line down" })
-keymap.set("n", "<C-k>", ":m .-2<CR>==", { desc = "Move line up" })
+keymap.set("n", "<C-j>", ":m .+1<CR>==", { desc = "Move line down" }, opts)
+keymap.set("n", "<C-k>", ":m .-2<CR>==", { desc = "Move line up" }, opts)
 
 -- quickfix navigation
-keymap.set("n", "]q", ":cnext<CR>", { desc = "Next quickfix item" })
-keymap.set("n", "[q", ":cprev<CR>", { desc = "Previous quickfix item" })
+keymap.set("n", "]q", ":cnext<CR>", { desc = "Next quickfix item" }, opts)
+keymap.set("n", "[q", ":cprev<CR>", { desc = "Previous quickfix item" }, opts)

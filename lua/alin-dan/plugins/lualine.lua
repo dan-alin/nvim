@@ -5,6 +5,7 @@ return {
 	},
 	config = function()
 		local ayu = require("lualine.themes.ayu_dark")
+
 		ayu.normal.c.bg = "none"
 		ayu.normal.a.bg = "#4fd6be"
 		ayu.insert.a.bg = "#c3e88d"
