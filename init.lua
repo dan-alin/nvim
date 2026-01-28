@@ -3,7 +3,9 @@ require("alin-dan.lazy")
 
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
 	callback = function()
-		vim.cmd("TSEnable highlight")
+		vim.schedule(function()
+			pcall(vim.cmd, "TSEnable highlight")
+		end)
 	end,
 })
 vim.diagnostic.config({
