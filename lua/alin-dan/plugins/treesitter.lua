@@ -33,7 +33,6 @@ return {
 				"css",
 				"scss",
 				"vue",
-				"angular",
 			}, -- matchup = {
 			-- 	enable = true,
 			-- },

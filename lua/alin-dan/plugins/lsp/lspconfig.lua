@@ -121,7 +121,6 @@ return {
 				"emmet_ls",
 				"prismals",
 				"rust_analyzer",
-				"angularls",
 				"vue_ls",
 			},
 			automatic_installation = true,
@@ -244,47 +243,6 @@ return {
 					lspconfig["vue_ls"].setup({
 						capabilities = capabilities,
 						filetypes = { "vue" },
-					})
-				end,
-
-				["angularls"] = function()
-					lspconfig["angularls"].setup({
-						capabilities = capabilities,
-						-- Include htmlangular for Angular component templates
-						filetypes = { "typescript", "html", "htmlangular", "typescriptreact" },
-						root_dir = function(fname)
-							local root = lspconfig.util.root_pattern("angular.json", "project.json", "nx.json")(fname)
-							if not root then
-								return nil
-							end
-
-							local has_lang_service = vim.fn.filereadable(
-								root .. "/node_modules/@angular/language-service/package.json"
-							) == 1
-							if not has_lang_service then
-								vim.notify(
-									"Angular LSP: @angular/language-service not found in "
-										.. root
-										.. ". Install it with: npm install --save-dev @angular/language-service",
-									vim.log.levels.WARN
-								)
-								return nil
-							end
-
-							return root
-						end,
-						settings = {
-							angular = {
-								enableTracing = false,
-								log = "off",
-								strictTemplates = true,
-							},
-						},
-						on_attach = function(client, bufnr)
-							-- Angular 20 specific optimizations
-							client.server_capabilities.documentFormattingProvider = false
-							client.server_capabilities.documentRangeFormattingProvider = false
-						end,
 					})
 				end,
 			},

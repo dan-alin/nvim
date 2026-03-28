@@ -33,7 +33,6 @@ return {
 				"graphql", -- graphql
 				"prismals", -- prisma
 				"rust_analyzer", -- rust
-				"angularls", -- angular
 				"vue_ls", -- vue
 			},
 			-- auto-install configured servers (with lspconfig)
@@ -48,9 +47,7 @@ return {
 				"black", -- python formatter
 				"pylint", -- python linter
 				"eslint_d", -- js linter
-				"angular-language-server", -- angular language server
 			},
 		})
 	end,
 }
-
