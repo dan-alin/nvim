@@ -5,12 +5,9 @@ return {
 		"WhoIsSethDaniel/mason-tool-installer.nvim",
 	},
 	config = function()
-		-- import mason
 		local mason = require("mason")
-		local mason_lspconfig = require("mason-lspconfig")
 		local mason_tool_installer = require("mason-tool-installer")
 
-		-- enable mason and configure icons
 		mason.setup({
 			ui = {
 				icons = {
@@ -21,23 +18,7 @@ return {
 			},
 		})
 
-		mason_lspconfig.setup({
-			-- list of servers for mason to install
-			ensure_installed = {
-				"ts_ls", -- typescript
-				"html", -- html
-				"cssls", -- css
-				"tailwindcss", -- tailwindcss
-				"svelte", -- svelte
-				"lua_ls", -- lua
-				"graphql", -- graphql
-				"prismals", -- prisma
-				"rust_analyzer", -- rust
-				"vue_ls", -- vue
-			},
-			-- auto-install configured servers (with lspconfig)
-			automatic_installation = true, -- not the same as ensure_installed
-		})
+		-- mason-lspconfig is configured once in lsp/lspconfig.lua (handlers + ensure_installed)
 
 		mason_tool_installer.setup({
 			ensure_installed = {

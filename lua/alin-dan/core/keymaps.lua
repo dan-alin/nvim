@@ -32,7 +32,7 @@ keymap.set("n", "+", "<C-a>", { desc = "Increment number" }, opts) -- increment
 keymap.set("n", "-", "<C-x>", { desc = "Decrement number" }, opts) -- decrement
 
 -- select all
-keymap.set("n", "<C-a>", "gg<S-v>G, opts")
+keymap.set("n", "<C-a>", "gg<S-v>G", vim.tbl_extend("force", opts, { desc = "Select all" }))
 
 -- paste without overwriting register
 keymap.set("x", "<leader>p", '"_dP', { desc = "Paste without overwriting register" }, opts)

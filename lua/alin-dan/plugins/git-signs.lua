@@ -1,6 +1,7 @@
 return {
   {
     "lewis6991/gitsigns.nvim",
+    event = { "BufReadPre", "BufNewFile" },
     config = function()
       local git_signs = require("gitsigns")
 
@@ -14,7 +15,7 @@ return {
         },
         numhl = false,             -- Highlight numbers for changes
         linehl = false,            -- Highlight lines for changes
-        current_line_blame = true, -- Show blame inline by default
+        current_line_blame = false, -- Toggle with <leader>gb (lighter than always-on)
         current_line_blame_opts = {
           virt_text = true,
           virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'

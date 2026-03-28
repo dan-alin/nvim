@@ -1,13 +1,6 @@
 require("alin-dan.core")
 require("alin-dan.lazy")
 
-vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-	callback = function()
-		vim.schedule(function()
-			pcall(vim.cmd, "TSEnable highlight")
-		end)
-	end,
-})
 vim.diagnostic.config({
 	signs = true, -- Keep signs in the gutter
 	underline = true, -- Enable underlines for diagnostics
@@ -29,12 +22,6 @@ vim.diagnostic.config({
 	update_in_insert = false, -- Don't update diagnostics while typing
 })
 
--- Ensure diagnostics are shown immediately
-vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile", "InsertLeave", "TextChanged" }, {
-	callback = function()
-		vim.diagnostic.show()
-	end,
-})
 -- set the cursoline to be transparent
 vim.cmd("highlight CursorLine guibg=NONE ctermbg=NONE")
 

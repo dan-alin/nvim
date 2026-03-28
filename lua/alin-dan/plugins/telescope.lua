@@ -1,8 +1,12 @@
+local fzf_build = vim.fn.has("win32") == 1
+		and "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release"
+	or "make"
+
 return {
 	"nvim-telescope/telescope.nvim",
 	dependencies = {
 		"nvim-lua/plenary.nvim",
-		{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+		{ "nvim-telescope/telescope-fzf-native.nvim", build = fzf_build },
 		"nvim-tree/nvim-web-devicons",
 		"folke/todo-comments.nvim",
 	},
@@ -35,7 +39,7 @@ return {
 			},
 		})
 
-		telescope.load_extension("fzf")
+		pcall(telescope.load_extension, "fzf")
 
 		-- set keymaps
 		local keymap = vim.keymap -- for conciseness
