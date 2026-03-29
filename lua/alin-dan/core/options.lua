@@ -22,18 +22,21 @@ opt.termguicolors = true
 opt.background = "dark" -- colorschemes that can be light or dark will be made dark
 opt.signcolumn = "yes" -- show sign column so that text doesn't shift
 
+-- global statusline (matches lualine globalstatus); avoids laststatus changing at plugin load
+opt.laststatus = 3
+
 -- backspace
 opt.backspace = "indent,eol,start" -- allow backspace on indent, end of line or insert mode start position
 
--- clipboard
-opt.clipboard:append("unnamedplus") -- use system clipboard as default register
+-- clipboard: sync yank/delete with system
+opt.clipboard:append("unnamedplus")
 
 -- turn off swapfile
 opt.swapfile = false
 
 -- folding configuration with TreeSitter and nvim-ufo
-opt.foldmethod = "expr"
-opt.foldexpr = "nvim_treesitter#foldexpr()"
+-- opt.foldmethod = "expr"
+-- opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 opt.foldenable = true
 opt.foldlevel = 99 -- start with all folds open
 opt.foldcolumn = "0" -- show fold column

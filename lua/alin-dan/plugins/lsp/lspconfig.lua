@@ -4,22 +4,12 @@ return {
 	dependencies = {
 		"hrsh7th/cmp-nvim-lsp",
 		{ "antosha417/nvim-lsp-file-operations", config = true },
-		{ "folke/neodev.nvim", opts = {} },
 		{
 			"williamboman/mason.nvim",
 			"williamboman/mason-lspconfig.nvim",
 		},
 	},
 	config = function()
-		-- Suppress deprecation warnings temporarily while plugins update
-		local notify_once = vim.notify_once
-		vim.notify_once = function(msg, level, opts)
-			if type(msg) == "string" and msg:match("jump_to_location.*deprecated") then
-				return -- Suppress jump_to_location deprecation warnings
-			end
-			return notify_once(msg, level, opts)
-		end
-
 		-- import lspconfig plugin
 		local lspconfig = require("lspconfig")
 
@@ -45,12 +35,12 @@ return {
 				opts.desc = "Go to declaration"
 				keymap.set("n", "gD", vim.lsp.buf.declaration, opts) -- go to declaration
 
-				opts.desc = "Show LSP definitions"
-				keymap.set("n", "gd", vim.lsp.buf.definition, opts) -- show lsp definitions
+				-- gd: jump to single definition; <leader>gd: browse/pick (Telescope)
+				opts.desc = "Definition: jump (not Telescope)"
+				keymap.set("n", "gd", vim.lsp.buf.definition, opts)
 
-				-- Alternative Telescope mapping
-				opts.desc = "Show LSP definitions (Telescope)"
-				keymap.set("n", "<leader>gd", "<cmd>Telescope lsp_definitions<CR>", opts) -- show lsp definitions via telescope
+				opts.desc = "Definition: Telescope (pick location)"
+				keymap.set("n", "<leader>gd", "<cmd>Telescope lsp_definitions<CR>", opts)
 
 				opts.desc = "Show LSP implementations"
 				keymap.set("n", "gi", "<cmd>Telescope lsp_implementations<CR>", opts) -- show lsp implementations
@@ -79,8 +69,8 @@ return {
 				opts.desc = "Show documentation for what is under cursor"
 				keymap.set("n", "K", vim.lsp.buf.hover, opts) -- show documentation for what is under cursor
 
-				opts.desc = "Restart LSP"
-				keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
+				opts.desc = "Restart LSP (built-in :LspRestart)"
+				keymap.set("n", "<leader>rs", "<cmd>LspRestart<CR>", opts)
 			end,
 		})
 
@@ -93,23 +83,9 @@ return {
 		-- Increase LSP timeout for better reliability
 		vim.lsp.set_log_level("WARN") -- Reduce log verbosity
 
-		-- Change the Diagnostic symbols in the sign column (gutter)
-		local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
-		-- Configure diagnostic signs using the modern API
-		vim.diagnostic.config({
-			signs = {
-				text = {
-					[vim.diagnostic.severity.ERROR] = signs.Error,
-					[vim.diagnostic.severity.WARN] = signs.Warn,
-					[vim.diagnostic.severity.HINT] = signs.Hint,
-					[vim.diagnostic.severity.INFO] = signs.Info,
-				},
-			},
-		})
-
 		-- Setup mason-lspconfig with handlers
 		mason_lspconfig.setup({
-			-- list of servers for mason to install
+			-- Mason installs these on sync; add e.g. graphql / prismals here if you use them
 			ensure_installed = {
 				"ts_ls",
 				"html",
@@ -117,9 +93,7 @@ return {
 				"tailwindcss",
 				"svelte",
 				"lua_ls",
-				"graphql",
 				"emmet_ls",
-				"prismals",
 				"rust_analyzer",
 				"vue_ls",
 			},
@@ -134,9 +108,22 @@ return {
 
 				-- TypeScript server with Vue support
 				["ts_ls"] = function()
+					local mason_registry = require("mason-registry")
+					local vue_language_server_path = mason_registry.get_package("vue-language-server"):get_install_path()
+						.. "/node_modules/@vue/language-server"
+
 					lspconfig["ts_ls"].setup({
 						capabilities = capabilities,
-						filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+						init_options = {
+							plugins = {
+								{
+									name = "@vue/typescript-plugin",
+									location = vue_language_server_path,
+									languages = { "vue" },
+								},
+							},
+						},
+						filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
 					})
 				end,
 
@@ -201,6 +188,9 @@ return {
 						capabilities = capabilities,
 						settings = {
 							Lua = {
+								workspace = {
+									checkThirdParty = false,
+								},
 								diagnostics = {
 									globals = { "vim" },
 								},

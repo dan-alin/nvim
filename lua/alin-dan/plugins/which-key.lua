@@ -6,8 +6,13 @@ return {
     vim.o.timeoutlen = 500
   end,
   opts = {
-    -- your configuration comes here
-    -- or leave it empty to use the default settings
-    -- refer to the configuration section below
+    spec = {
+      { "<leader>", group = "Leader" },
+      { "<leader>gd", desc = "LSP definition (Telescope)" },
+      { "g", group = "goto" },
+      { "gd", desc = "LSP definition (jump)" },
+      { "[", group = "prev" },
+      { "]", group = "next" },
+    },
   },
 }

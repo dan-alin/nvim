@@ -4,11 +4,62 @@ local fzf_build = vim.fn.has("win32") == 1
 
 return {
 	"nvim-telescope/telescope.nvim",
+	cmd = "Telescope",
+	keys = {
+		{
+			"<leader>f",
+			function()
+				require("telescope.builtin").find_files()
+			end,
+			desc = "Fuzzy find files in cwd",
+		},
+		{
+			"<leader>/",
+			function()
+				require("telescope.builtin").live_grep()
+			end,
+			desc = "Find string in cwd",
+		},
+		{
+			"<leader>F",
+			function()
+				require("telescope.builtin").grep_string()
+			end,
+			desc = "Find string under cursor in cwd",
+		},
+		{
+			"<leader>b",
+			function()
+				require("telescope.builtin").buffers()
+			end,
+			desc = "Open buffers",
+		},
+		{
+			"<leader>h",
+			function()
+				require("telescope.builtin").help_tags()
+			end,
+			desc = "Open help tags",
+		},
+		{
+			"<leader>g",
+			function()
+				require("telescope.builtin").git_files()
+			end,
+			desc = "Open git files",
+		},
+		{
+			"<leader>tq",
+			function()
+				require("telescope.builtin").quickfix()
+			end,
+			desc = "Telescope quickfix",
+		},
+	},
 	dependencies = {
 		"nvim-lua/plenary.nvim",
 		{ "nvim-telescope/telescope-fzf-native.nvim", build = fzf_build },
 		"nvim-tree/nvim-web-devicons",
-		"folke/todo-comments.nvim",
 	},
 	config = function()
 		local telescope = require("telescope")
@@ -40,18 +91,5 @@ return {
 		})
 
 		pcall(telescope.load_extension, "fzf")
-
-		-- set keymaps
-		local keymap = vim.keymap -- for conciseness
-		local builtin = require("telescope.builtin")
-
-		keymap.set("n", "<leader>f", builtin.find_files, { desc = "Fuzzy find files in cwd" })
-		keymap.set("n", "<leader>/", builtin.live_grep, { desc = "Find string in cwd" })
-		keymap.set("n", "<leader>F", builtin.grep_string, { desc = "Find string under cursor in cwd" })
-		keymap.set("n", "<leader>b", builtin.buffers, { desc = "Open buffers" })
-		keymap.set("n", "<leader>h", builtin.help_tags, { desc = "Open help tags" })
-		keymap.set("n", "<leader>g", builtin.git_files, { desc = "Open git files" })
-		keymap.set("n", "<leader>tq", builtin.quickfix, { desc = "Telescope quickfix" })
-		keymap.set("n", "<leader>A", "<cmd>Alpha<CR>", { desc = "Open Alpha" })
 	end,
 }

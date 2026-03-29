@@ -18,9 +18,9 @@ return {
     local keymap = vim.keymap
     local opts = { noremap = true, silent = true }
 
-    -- Navigate conflicts
+    -- Navigate conflicts (<leader>gp is Gitsigns preview_hunk in git buffers)
     keymap.set('n', '<leader>gn', '<cmd>GitConflictNextConflict<CR>', vim.tbl_extend('force', opts, { desc = 'Next git conflict' }))
-    keymap.set('n', '<leader>gp', '<cmd>GitConflictPrevConflict<CR>', vim.tbl_extend('force', opts, { desc = 'Previous git conflict' }))
+    keymap.set('n', '<leader>gP', '<cmd>GitConflictPrevConflict<CR>', vim.tbl_extend('force', opts, { desc = 'Previous git conflict' }))
 
     -- Choose sides
     keymap.set('n', '<leader>gco', '<cmd>GitConflictChooseOurs<CR>', vim.tbl_extend('force', opts, { desc = 'Choose our changes' }))

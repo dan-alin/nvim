@@ -13,11 +13,27 @@ return {
 		}
 
 		local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
+		-- Skip auto-lint on huge buffers; <leader>l still runs manually
+		local max_lines_auto = 20000
 
 		vim.api.nvim_create_autocmd("BufWritePost", {
 			group = lint_augroup,
-			callback = function()
-				lint.try_lint()
+			callback = function(args)
+				local buf = args.buf
+				if vim.bo[buf].buftype ~= "" or not vim.bo[buf].buflisted then
+					return
+				end
+				if vim.api.nvim_buf_line_count(buf) > max_lines_auto then
+					return
+				end
+				vim.defer_fn(function()
+					if not vim.api.nvim_buf_is_valid(buf) then
+						return
+					end
+					vim.api.nvim_buf_call(buf, function()
+						lint.try_lint()
+					end)
+				end, 0)
 			end,
 		})
 

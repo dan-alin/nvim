@@ -2,7 +2,14 @@ require("alin-dan.core")
 require("alin-dan.lazy")
 
 vim.diagnostic.config({
-	signs = true, -- Keep signs in the gutter
+	signs = {
+		text = {
+			[vim.diagnostic.severity.ERROR] = " ",
+			[vim.diagnostic.severity.WARN] = " ",
+			[vim.diagnostic.severity.HINT] = "󰠠 ",
+			[vim.diagnostic.severity.INFO] = " ",
+		},
+	},
 	underline = true, -- Enable underlines for diagnostics
 	virtual_text = {
 		enabled = true,
@@ -13,7 +20,6 @@ vim.diagnostic.config({
 	},
 	float = {
 		border = "rounded", -- Change to "single", "double", "solid", etc.
-		source = "always", -- Show source in floating window
 		header = "",
 		prefix = "",
 		focusable = false,

@@ -13,7 +13,7 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({ { import = "alin-dan.plugins" }, { import = 'alin-dan.plugins.lsp' } }, {
   checker = {
-    enabled = true,
+    enabled = false,
     notify = false,
   },
   change_detection = {

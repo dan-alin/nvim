@@ -13,10 +13,6 @@ return {
             skip = true,
           },
         },
-        {
-          filter = { event = "notify" },
-          opts = { skip = true },
-        },
       },
       presets = {
         lsp_doc_border = true,
