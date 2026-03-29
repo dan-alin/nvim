@@ -6,6 +6,12 @@ return {
 		build = ":TSUpdate",
 		event = { "BufReadPost", "BufNewFile" },
 		opts = {
+			highlight = {
+				enable = true,
+			},
+			indent = {
+				enable = true,
+			},
 			auto_install = true,
 			-- Parsers to install up front; others install on first open of that filetype
 			ensure_installed = {
