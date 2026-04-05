@@ -17,7 +17,7 @@ return {
 				json = { "prettier" },
 				yaml = { "prettier" },
 				markdown = { "prettier" },
-				graphql = { "prettier" },
+				-- graphql = { "prettier" },
 				liquid = { "prettier" },
 				lua = { "stylua" },
 				rust = { "rustfmt" },

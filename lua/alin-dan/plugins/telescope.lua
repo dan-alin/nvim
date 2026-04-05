@@ -7,53 +7,67 @@ return {
 	cmd = "Telescope",
 	keys = {
 		{
-			"<leader>f",
+			"<leader>ff",
 			function()
 				require("telescope.builtin").find_files()
 			end,
-			desc = "Fuzzy find files in cwd",
+			desc = "Find files",
+		},
+		{
+			"<leader>fr",
+			function()
+				require("telescope.builtin").oldfiles()
+			end,
+			desc = "Recent files",
+		},
+		{
+			"<leader>sr",
+			function()
+				require("telescope.builtin").resume()
+			end,
+			desc = "Resume last search",
 		},
 		{
 			"<leader>/",
 			function()
 				require("telescope.builtin").live_grep()
 			end,
-			desc = "Find string in cwd",
+			desc = "Find string (grep)",
 		},
 		{
-			"<leader>F",
+			"<leader>fc",
 			function()
 				require("telescope.builtin").grep_string()
 			end,
-			desc = "Find string under cursor in cwd",
+			desc = "Find string under cursor",
 		},
 		{
-			"<leader>b",
+			"<leader>fb",
 			function()
 				require("telescope.builtin").buffers()
 			end,
-			desc = "Open buffers",
+			desc = "Find buffers",
 		},
 		{
-			"<leader>h",
+			"<leader>fh",
 			function()
 				require("telescope.builtin").help_tags()
 			end,
-			desc = "Open help tags",
+			desc = "Find help",
 		},
 		{
-			"<leader>g",
+			"<leader>fg",
 			function()
 				require("telescope.builtin").git_files()
 			end,
-			desc = "Open git files",
+			desc = "Find git files",
 		},
 		{
-			"<leader>tq",
+			"<leader>fk",
 			function()
-				require("telescope.builtin").quickfix()
+				require("telescope.builtin").keymaps()
 			end,
-			desc = "Telescope quickfix",
+			desc = "Find keymaps",
 		},
 	},
 	dependencies = {
@@ -91,5 +105,6 @@ return {
 		})
 
 		pcall(telescope.load_extension, "fzf")
+		pcall(telescope.load_extension, "aerial")
 	end,
 }

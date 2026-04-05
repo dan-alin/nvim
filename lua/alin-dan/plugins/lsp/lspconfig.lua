@@ -71,6 +71,12 @@ return {
 
 				opts.desc = "Restart LSP (built-in :LspRestart)"
 				keymap.set("n", "<leader>rs", "<cmd>LspRestart<CR>", opts)
+
+				opts.desc = "Show document symbols (Telescope)"
+				keymap.set("n", "<leader>ss", "<cmd>Telescope lsp_document_symbols<CR>", opts)
+
+				opts.desc = "Show workspace symbols (Telescope)"
+				keymap.set("n", "<leader>sS", "<cmd>Telescope lsp_dynamic_workspace_symbols<CR>", opts)
 			end,
 		})
 
