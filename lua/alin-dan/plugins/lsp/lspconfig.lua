@@ -81,7 +81,7 @@ return {
 		vim.api.nvim_create_user_command("LspRestart", function()
 			local buf = vim.api.nvim_get_current_buf()
 			for _, client in ipairs(vim.lsp.get_clients({ bufnr = buf })) do
-				vim.lsp.stop_client(client.id)
+				vim.lsp.stop(client.id)
 			end
 			vim.defer_fn(function()
 				if vim.api.nvim_buf_is_valid(buf) then
@@ -92,7 +92,7 @@ return {
 			end, 100)
 		end, { desc = "Restart LSP for current buffer" })
 
-		vim.lsp.set_log_level("WARN")
+		vim.lsp.log.set_level("WARN")
 
 		-- Apply shared capabilities to all servers
 		vim.lsp.config("*", {

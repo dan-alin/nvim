@@ -83,6 +83,11 @@ return {
 			defaults = {
 				path_display = { "smart" },
 				file_ignore_patterns = { "node_modules", ".git" },
+				preview = {
+					-- Treesitter highlighting in preview buffers crashes on certain
+					-- injected parsers (e.g. tsx inside markdown code fences) in nvim 0.12.
+					treesitter = false,
+				},
 				vimgrep_arguments = {
 					"rg",
 					"--color=never",
