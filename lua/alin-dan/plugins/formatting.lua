@@ -10,27 +10,27 @@ return {
 				typescript = { "prettier" },
 				javascriptreact = { "prettier" },
 				typescriptreact = { "prettier" },
-				vue = { "prettier" },
 				svelte = { "prettier" },
 				css = { "prettier" },
 				html = { "prettier" },
 				json = { "prettier" },
 				yaml = { "prettier" },
 				markdown = { "prettier" },
-				graphql = { "prettier" },
 				liquid = { "prettier" },
 				lua = { "stylua" },
 				rust = { "rustfmt" },
+				vue = { "prettier" },
+			go = { "goimports", "gofumpt" },
 			},
 			format_after_save = {
-				lsp_fallback = true,
+				lsp_format = "fallback",
 				timeout_ms = 1000,
 			},
 		})
 
 		vim.keymap.set({ "n", "v" }, "<leader>mp", function()
 			conform.format({
-				lsp_fallback = true,
+				lsp_format = "fallback",
 				async = true,
 				timeout_ms = 1000,
 			})
