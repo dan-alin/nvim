@@ -1,63 +1,65 @@
-return {
-	{ "nvim-treesitter/playground", cmd = "TSPlaygroundToggle" },
+-- nvim-treesitter master branch: uses pre-compiled parsers (no tree-sitter CLI needed),
+-- supports ensure_installed / auto_install / highlight.enable via nvim-treesitter.configs.
+-- The main branch was a full rewrite requiring tree-sitter CLI to compile parsers from
+-- source. master is frozen but stable and works with Neovim 0.12.
 
+return {
 	{
 		"nvim-treesitter/nvim-treesitter",
+		branch = "master",
 		build = ":TSUpdate",
 		event = { "BufReadPost", "BufNewFile" },
 		dependencies = {
 			"nvim-treesitter/nvim-treesitter-textobjects",
 		},
-		opts = {
-			auto_install = true,
-			-- Parsers to install up front; others install on first open of that filetype
-			ensure_installed = {
-				"bash",
-				"diff",
-				"html",
-				"javascript",
-				"json",
-				"jsonc",
-				"lua",
-				"luadoc",
-				"markdown",
-				"markdown_inline",
-				"query",
-				"toml",
-				"tsx",
-				"typescript",
-				"vim",
-				"vimdoc",
-				"yaml",
-				"rust",
-				"svelte",
-				"css",
-				"scss",
-				"vue",
-			},
-
-			highlight = {
-				enable = true,
-			},
-
-			query_linter = {
-				enable = false,
-			},
-
-			playground = {
-				enable = false,
-			},
-		},
-		config = function(_, opts)
-			local TS = require("nvim-treesitter")
-			TS.setup(opts)
-
-			-- MDX
-			vim.filetype.add({
-				extension = {
-					mdx = "mdx",
+		config = function()
+			require("nvim-treesitter.configs").setup({
+				ensure_installed = {
+					"bash",
+					"diff",
+					"html",
+					"javascript",
+					"json",
+					"jsonc",
+					"lua",
+					"luadoc",
+					"markdown",
+					"markdown_inline",
+					"query",
+					"toml",
+					"tsx",
+					"typescript",
+					"vim",
+					"vimdoc",
+					"yaml",
+					"rust",
+					"svelte",
+					"css",
+					"scss",
+					"go",
+					"gomod",
+					"gosum",
+					"gowork",
+				},
+				auto_install = true,
+				highlight = {
+					enable = true,
+					-- Disable for very large files
+					disable = function(_, buf)
+						local max_filesize = 1024 * 1024 -- 1 MB
+						local ok, stats = pcall(vim.uv.fs_stat, vim.api.nvim_buf_get_name(buf))
+						return ok and stats and stats.size > max_filesize
+					end,
 				},
 			})
+
+			-- Language registrations
+			vim.treesitter.language.register("tsx", "typescriptreact")
+			vim.treesitter.language.register("tsx", "javascriptreact")
+			vim.treesitter.language.register("svelte", "svelte")
+
+			-- MDX: treat as markdown
+			vim.filetype.add({ extension = { mdx = "mdx" } })
 			vim.treesitter.language.register("markdown", "mdx")
 
 			-- textobjects: select

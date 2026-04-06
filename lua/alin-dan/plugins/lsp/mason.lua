@@ -2,14 +2,10 @@ return {
 	"williamboman/mason.nvim",
 	event = "VeryLazy",
 	dependencies = {
-		"williamboman/mason-lspconfig.nvim",
 		"WhoIsSethDaniel/mason-tool-installer.nvim",
 	},
 	config = function()
-		local mason = require("mason")
-		local mason_tool_installer = require("mason-tool-installer")
-
-		mason.setup({
+		require("mason").setup({
 			ui = {
 				icons = {
 					package_installed = "✓",
@@ -19,13 +15,26 @@ return {
 			},
 		})
 
-		-- mason-lspconfig is configured once in lsp/lspconfig.lua (handlers + ensure_installed)
-
-		mason_tool_installer.setup({
+		require("mason-tool-installer").setup({
 			ensure_installed = {
-				"prettier", -- prettier formatter
-				"stylua", -- lua formatter
-				"eslint_d", -- js linter
+				-- LSP servers
+				"typescript-language-server",
+				"svelte-language-server",
+				"html-lsp",
+				"css-lsp",
+				"tailwindcss-language-server",
+				"lua-language-server",
+				"emmet-ls",
+				"rust-analyzer",
+				"gopls",
+				-- Formatters
+				"prettier",
+				"stylua",
+				"gofumpt",
+				"goimports",
+				-- Linters
+				"eslint_d",
+				"golangci-lint",
 			},
 		})
 	end,
