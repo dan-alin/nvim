@@ -40,6 +40,7 @@ return {
 					"gomod",
 					"gosum",
 					"gowork",
+					"vue",
 				},
 				auto_install = true,
 				highlight = {

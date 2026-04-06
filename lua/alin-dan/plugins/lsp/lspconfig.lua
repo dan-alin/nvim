@@ -102,6 +102,7 @@ return {
 		-- Per-server custom configs
 		local servers_with_config = {
 			"ts_ls",
+			"vue_ls",
 			"gopls",
 			"rust_analyzer",
 			"lua_ls",
@@ -116,6 +117,7 @@ return {
 		-- Enable all servers (Mason installs the binaries)
 		vim.lsp.enable({
 			"ts_ls",
+			"vue_ls",
 			"html",
 			"cssls",
 			"tailwindcss",

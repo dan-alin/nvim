@@ -6,6 +6,7 @@ return {
 		"javascript",
 		"typescript",
 		"svelte",
+		"vue",
 		"javascriptreact",
 		"typescriptreact",
 	},

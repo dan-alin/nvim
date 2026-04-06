@@ -27,6 +27,7 @@ return {
 				"emmet-ls",
 				"rust-analyzer",
 				"gopls",
+			"vue-language-server",
 				-- Formatters
 				"prettier",
 				"stylua",

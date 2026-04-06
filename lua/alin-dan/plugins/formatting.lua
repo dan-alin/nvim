@@ -19,7 +19,8 @@ return {
 				liquid = { "prettier" },
 				lua = { "stylua" },
 				rust = { "rustfmt" },
-				go = { "goimports", "gofumpt" },
+				vue = { "prettier" },
+			go = { "goimports", "gofumpt" },
 			},
 			format_after_save = {
 				lsp_format = "fallback",

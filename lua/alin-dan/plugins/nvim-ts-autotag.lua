@@ -7,6 +7,7 @@ return {
 		"javascriptreact",
 		"typescriptreact",
 		"svelte",
+		"vue",
 		"xml",
 	},
 	config = function()

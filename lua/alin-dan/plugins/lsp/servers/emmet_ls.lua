@@ -8,6 +8,7 @@ return {
 		"typescript",
 		"typescriptreact",
 		"svelte",
+		"vue",
 	},
 	init_options = {
 		html = {
