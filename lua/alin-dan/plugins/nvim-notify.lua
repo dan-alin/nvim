@@ -1,30 +1,27 @@
-return {
-	{
-		"rcarriga/nvim-notify",
-		lazy = true,
-		opts = {
-			background_colour = "#000000",
-			fps = 30,
-			icons = {
-				DEBUG = "",
-				ERROR = "",
-				INFO = "",
-				TRACE = "✎",
-				WARN = "",
-			},
-			level = 2,
-			minimum_width = 50,
-			render = "default",
-			stages = "fade_in_slide_out",
-			timeout = 3000,
-			top_down = true,
-			border = "rounded",
+local M = {}
+
+function M.setup()
+	local notify = require("notify")
+	notify.setup({
+		background_colour = "#000000",
+		fps = 30,
+		icons = {
+			DEBUG = "",
+			ERROR = "",
+			INFO = "",
+			TRACE = "✎",
+			WARN = "",
 		},
-		config = function(_, opts)
-			local notify = require("notify")
-			notify.setup(opts)
-			-- Set nvim-notify as the default notification handler
-			vim.notify = notify
-		end,
-	},
-}
+		level = 2,
+		minimum_width = 50,
+		render = "default",
+		stages = "fade_in_slide_out",
+		timeout = 3000,
+		-- Stack upward from the bottom (closer to bottom-right with default layout).
+		top_down = false,
+		border = "rounded",
+	})
+	vim.notify = notify
+end
+
+return M

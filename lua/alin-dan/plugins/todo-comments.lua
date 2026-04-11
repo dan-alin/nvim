@@ -1,21 +1,17 @@
-return {
-  "folke/todo-comments.nvim",
-  event = "VeryLazy",
-  dependencies = { "nvim-lua/plenary.nvim" },
-  config = function()
-    local todo_comments = require("todo-comments")
+local M = {}
 
-    -- set keymaps
-    local keymap = vim.keymap -- for conciseness
+function M.setup()
+	local todo_comments = require("todo-comments")
 
-    keymap.set("n", "]t", function()
-      todo_comments.jump_next()
-    end, { desc = "Next todo comment" })
+	vim.keymap.set("n", "]t", function()
+		todo_comments.jump_next()
+	end, { desc = "Next todo comment" })
 
-    keymap.set("n", "[t", function()
-      todo_comments.jump_prev()
-    end, { desc = "Previous todo comment" })
+	vim.keymap.set("n", "[t", function()
+		todo_comments.jump_prev()
+	end, { desc = "Previous todo comment" })
 
-    todo_comments.setup()
-  end,
-}
+	todo_comments.setup()
+end
+
+return M

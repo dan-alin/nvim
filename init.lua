@@ -1,5 +1,5 @@
 require("alin-dan.core")
-require("alin-dan.lazy")
+require("alin-dan.pack")
 
 vim.diagnostic.config({
 	signs = {
