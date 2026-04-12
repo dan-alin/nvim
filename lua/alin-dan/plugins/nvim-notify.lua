@@ -3,6 +3,7 @@ local M = {}
 function M.setup()
 	local notify = require("notify")
 	notify.setup({
+		merge_duplicates = true,
 		background_colour = "#000000",
 		fps = 30,
 		icons = {

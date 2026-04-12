@@ -2,7 +2,7 @@ local M = {}
 
 function M.setup()
 	vim.o.timeout = true
-	vim.o.timeoutlen = 500
+	vim.o.timeoutlen = 1000
 
 	require("which-key").setup({
 		delay = 500,
