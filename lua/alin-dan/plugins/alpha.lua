@@ -12,10 +12,9 @@ function M.setup()
 	}
 
 	dashboard.section.buttons.val = {
-		dashboard.button("f", "󰱼   Find File", "<cmd>lua require('telescope.builtin').find_files()<CR>"),
+		dashboard.button("ff", "󰱼   Find File", "<cmd>lua require('telescope.builtin').find_files()<CR>"),
 		dashboard.button("e", "   File Explorer", "<cmd>NvimTreeToggle<CR>"),
 		dashboard.button("/", "   Live Grep ", "<cmd>lua require('telescope.builtin').live_grep()<CR>"),
-		dashboard.button("g", "󰱼   Find Git Files", "<cmd>lua require('telescope.builtin').git_files()<CR>"),
 		dashboard.button("m", "   Mason", "<cmd>Mason<CR>"),
 		dashboard.button("p", "   Pack", "<cmd>PackUpdate<CR>"),
 		dashboard.button("q", "   Quit NVIM", "<cmd>qa<CR>"),
